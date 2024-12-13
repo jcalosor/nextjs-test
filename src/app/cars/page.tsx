@@ -20,6 +20,7 @@ interface Car {
     image: string;
 }
 
+// Create a MirageJS server to mock API data for cars
 createServer({
     routes() {
         this.namespace = 'api';
@@ -82,14 +83,19 @@ createServer({
 });
 
 const Cars: React.FC = () => {
+    // State to store the list of cars
     const [cars, setCars] = useState<Car[]>([]);
+
+    // State to store the selected car for the modal
     const [selectedCar, setSelectedCar] = useState<Car | null>(null);
 
     useEffect(() => {
+        // Fetch car data from the mocked API
         const fetchData = async () => {
             try {
                 const response = await fetch('/api/cars');
                 const data = await response.json();
+                // Update state with car data
                 setCars(data);
             } catch (error) {
                 console.error(error);
@@ -112,6 +118,7 @@ const Cars: React.FC = () => {
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.3 }}
                 >
+                    {/* Car image that opens the modal on click */}
                     <Image
                         src={car.image}
                         alt={`${car.make} ${car.model}`}
@@ -138,6 +145,7 @@ const Cars: React.FC = () => {
                 </motion.div>
             ))}
 
+            {/* Modal for displaying selected car details */}
             {selectedCar && (
                 <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50" onClick={closeModal}>
                     <motion.div
